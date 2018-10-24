@@ -18,6 +18,12 @@ Resources:
         - AWSXrayWriteOnlyAccess
     Metadata:
       StackeryName: triggerDeploy
+  topicB1D0978B:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub ${AWS::StackName}-topicB1D0978B
+    Metadata:
+      StackeryName: pushToGithub
 Parameters:
   StackeryStackTagName:
     Type: String
