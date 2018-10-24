@@ -16,14 +16,36 @@ Resources:
       Tracing: Active
       Policies:
         - AWSXrayWriteOnlyAccess
+      Events:
+        api1C38BFF9:
+          Type: Api
+          Properties:
+            Path: /github-hook
+            Method: POST
+            RestApiId: !Ref api1C38BFF9
     Metadata:
       StackeryName: triggerDeploy
-  topicB1D0978B:
-    Type: AWS::SNS::Topic
+  api1C38BFF9:
+    Type: AWS::Serverless::Api
     Properties:
-      TopicName: !Sub ${AWS::StackName}-topicB1D0978B
+      Name: !Sub
+        - ${ResourceName} From Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName}
+        - ResourceName: githubHookApi
+      StageName: !Ref StackeryEnvironmentAPIGatewayStageName
+      DefinitionBody:
+        swagger: '2.0'
+        info: {}
+        paths:
+          /github-hook:
+            post:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${function4413368A.Arn}/invocations
+              responses: {}
+      EndpointConfiguration: REGIONAL
     Metadata:
-      StackeryName: pushToGithub
+      StackeryName: githubHookApi
 Parameters:
   StackeryStackTagName:
     Type: String
@@ -31,3 +53,6 @@ Parameters:
   StackeryEnvironmentTagName:
     Type: String
     Description: Environment Name (injected by Stackery at deployment time)
+  StackeryEnvironmentAPIGatewayStageName:
+    Type: String
+    Description: Environment name used for API Gateway Stage names (injected by Stackery at deployment time)
