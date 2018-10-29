@@ -1,16 +1,15 @@
-module.exports.githubWebhookListener = (event, context, callback) => {
-  let errMsg; // eslint-disable-line
+exports.handler = (event, context, callback) => {
   const token = process.env.GITHUB_WEBHOOK_SECRET;
   const headers = event.headers;
   const body = JSON.parse(event.body);
-  const { repository, pusher, sender } = body;
+  const { repository, pusher } = body;
   const repo = repository.name;
   const username = pusher.name;
   const url = repository.url;
   const githubEvent = headers['X-GitHub-Event'];
 
   if (typeof token !== 'string') {
-    errMsg = 'Must provide a \'GITHUB_WEBHOOK_SECRET\' env variable';
+    let errMsg = 'Must provide a \'GITHUB_WEBHOOK_SECRET\' env variable';
     return callback(null, {
       statusCode: 401,
       headers: { 'Content-Type': 'text/plain' },
