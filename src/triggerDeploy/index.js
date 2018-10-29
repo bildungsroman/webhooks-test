@@ -1,4 +1,4 @@
-exports.handler = (event, context, callback) => {
+module.exports.githubWebhookListener = (event, context, callback) => {
   const token = process.env.GITHUB_WEBHOOK_SECRET;
   const headers = event.headers;
   const body = JSON.parse(event.body);
