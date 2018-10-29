@@ -9,7 +9,7 @@ Resources:
         - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Function ${ResourceName}
         - ResourceName: triggerDeploy
       CodeUri: src/triggerDeploy
-      Handler: index.handler
+      Handler: index.githubWebhookListener
       Runtime: nodejs8.10
       MemorySize: 3008
       Timeout: 30
@@ -23,6 +23,9 @@ Resources:
             Path: /github-hook
             Method: POST
             RestApiId: !Ref api1C38BFF9
+      Environment:
+        Variables:
+          GITHUB_WEBHOOK_SECRET: !Ref StackeryEnvConfiggithubSecretAsString
     Metadata:
       StackeryName: triggerDeploy
   api1C38BFF9:
@@ -56,3 +59,9 @@ Parameters:
   StackeryEnvironmentAPIGatewayStageName:
     Type: String
     Description: Environment name used for API Gateway Stage names (injected by Stackery at deployment time)
+  StackeryEnvConfiggithubSecretAsString:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /Stackery/Environments/<StackeryEnvId>/Config/githubSecret
+Metadata:
+  StackeryEnvConfigParameters:
+    StackeryEnvConfiggithubSecretAsString: githubSecret
