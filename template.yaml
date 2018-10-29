@@ -9,7 +9,7 @@ Resources:
         - Stackery Stack ${StackeryStackTagName} Environment ${StackeryEnvironmentTagName} Function ${ResourceName}
         - ResourceName: triggerDeploy
       CodeUri: src/triggerDeploy
-      Handler: index.githubWebhookListener
+      Handler: index.triggerDeploy
       Runtime: nodejs8.10
       MemorySize: 3008
       Timeout: 30
